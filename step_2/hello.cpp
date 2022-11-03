@@ -17,10 +17,10 @@ int main(){
     sycl::queue q;
     std::cout << "Device: " << q.get_device().get_info<sycl::info::device::name>() << std::endl;
 
-  int *data = malloc_shared<int>(N, q);
+  int *data = sycl::malloc_shared<int>(N, q);
   for(int i=0; i<N; i++) data[i] = i;
 
-  q.parallel_for(range<1>(N), [=] (id<1> i){
+  q.parallel_for(sycl::range<1>(N), [=] (sycl::id<1> i){
     data[i] *= 2;
   }).wait();
 
