@@ -1,0 +1,3 @@
+[submodule "thirdparty/SYCL-Hashing-Algorithms"]
+	path = thirdparty/SYCL-Hashing-Algorithms
+	url = https://github.com/jmjatlanta/SYCL-Hashing-Algorithms.git
