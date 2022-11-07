@@ -1,9 +1,13 @@
 CXX=../../sycl/build/bin/clang++
 SYCL_DIR=../../sycl/build
+THIRDPARTY_DIR=../thirdparty
+SYCL_SHA256_DIR=$(THIRDPARTY_DIR)/SYCL-Hashing-Algorithms
+SYCL_SHA256_INC=$(SYCL_SHA256_DIR)/include
 FSYCL_PARAMS=-fsycl -fsycl-targets=nvptx64-nvidia-cuda #-fno-sycl-libspirv
+#FSYCL_PARAMS=-fsycl -fsycl-targets=spir64_x86_64-unknown-unknown
 #CXX=dpcpp
 #SYCL_DIR=/opt/intel/oneapi/compiler/2022.2.0/linux
-CXXFLAGS=-O2 -I. -I$(SYCL_DIR)/include/sycl -I$(SYCL_DIR) $(FSYCL_PARAMS)
+CXXFLAGS=-O2 -I. -I$(SYCL_DIR)/include/sycl -I$(SYCL_DIR) -I$(SYCL_SHA256_INC) $(FSYCL_PARAMS)
 LFLAGS=$(FSYCL_PARAMS)
 
 %.o: %.cpp
@@ -12,7 +16,7 @@ LFLAGS=$(FSYCL_PARAMS)
 %.o: %.cu
 	nvcc -c $(CXXFLAGS) $^ -o $@
 
-step2: main.o crypto/sha256.o uint256.o util/strencodings.o
+step2: main.o crypto/sha256.o uint256.o util/strencodings.o $(SYCL_SHA256_DIR)/src/hash_functions/sha256.o
 	$(CXX) $(LFLAGS) -o $@ $^
 
 # the "Hello, World! of SYCL/DPC++
